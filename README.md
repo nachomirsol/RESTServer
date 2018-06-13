@@ -18,3 +18,4 @@ REST Server API to manage users, categories and products.
 - BodyParser
 
 ## How to use it
+Download or clone repo to your local branch.
