@@ -1,0 +1,22 @@
+{
+  "name": "restserver",
+  "version": "1.0.0",
+  "description": "REST Server API to manage users, categories and products.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nachomirsol/RESTServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nachomirsol/RESTServer/issues"
+  },
+  "homepage": "https://github.com/nachomirsol/RESTServer#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
