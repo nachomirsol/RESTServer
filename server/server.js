@@ -1,6 +1,10 @@
 require('./config/config.js');
+
+const mongoose = require('mongoose');
 const express = require("express");
 const app = express();
+
+
 
 const bodyParser = require('body-parser');
 
@@ -10,50 +14,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //parse application/json middlewares cada petición pasa por estas lineas
 app.use(bodyParser.json());
 
-
-app.get('/usuario', (req, res) => {
-
-	res.json('get Usuario');
-
-});
+// require the routes file
+app.use(require('./routes/user'));
 
 
-app.post('/usuario:id', (req, res) => {
+mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
+	if (err) throw err;
 
-	let body = req.body;
-
-	if (body.name === undefined) {
-
-		res.status(400).json({
-			ok: false,
-			message: 'name is required',
-		});
-	}
-
-	res.json({
-		user: body
-	});
+	console.log('connected successfully');
 
 });
 
-
-app.put('/usuario', (req, res) => {
-
-	let id = req.params.id;
-
-	res.json({
-		id
-	});
-
-});
-
-
-app.delete('/usuario', (req, res) => {
-
-	res.json({
-
-	});
-})
 
 app.listen(process.env.PORT, () => {
 	console.log('Escuchando el puerto: ', process.env.PORT);
