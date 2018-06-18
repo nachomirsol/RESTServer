@@ -1,10 +1,11 @@
 # REST SERVER API
 
-REST Server API to manage users, categories and products.
+REST Server API to manage users, categories and products from a café.
 
 ## Technologies
 - Javascript
 - Node js
+- Express js
 - Mongo DB
 - Mongoose
 
@@ -20,6 +21,7 @@ REST Server API to manage users, categories and products.
 - mongoose
 - mongoose-unique-validator
 - underscore
+- Json Web Token (jwt)
 
 ## How to use it
 Download or clone repo to your local branch.
