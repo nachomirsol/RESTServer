@@ -14,6 +14,7 @@ let from = req.query.from || 0;
 from = Number(from);
 
 let limit = req.query.limit || 5;
+
 limit = Number(limit);
 
     User.find({status:true},{name:1,email:1})
@@ -50,7 +51,7 @@ app.post('/user', (req, res) => {
         name:body.name,
         email:body.email,
         password:bcrypt.hashSync(body.password, 10),
-        rol:body.rol
+        role:body.role
     });
 
     user.save( (err,userDB) => {

@@ -14,8 +14,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //parse application/json middlewares cada petición pasa por estas lineas
 app.use(bodyParser.json());
 
-// require the routes file
-app.use(require('./routes/user'));
+// routes global config
+app.use(require('./routes/index'));
+
 
 
 mongoose.connect(process.env.URLDB, (err, res) => {
