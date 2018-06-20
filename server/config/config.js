@@ -13,16 +13,19 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // ========================================
 // Database
 // ========================================
-let URLDB;
 
- if (process.env.NODE_ENV === 'dev') {
+ process.env.URLDB = 'mongodb://cafe-user:123456a@ds261660.mlab.com:61660/cafedb';
 
-     urlDB = 'mongodb://localhost:27017/cafe';
 
- } else {
+// ========================================
+// Token expiration
+// ========================================
+// 60 secs
+process.env.EXPIRATION_TOKEN = 60*60*24*30;
 
-     URLDB = 'mongodb://cafe-user:123456a@ds261660.mlab.com:61660/cafedb';
+// ========================================
+// SEED authentication
+// ========================================
 
- }
+process.env.SEED = process.env.SEED || 'this is develop seed';
 
-process.env.URLDB = URLDB
