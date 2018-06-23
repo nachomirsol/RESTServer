@@ -5,12 +5,14 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
 const User = require('../models/user');
-const {verifyToken} = require('../middlewares/authentication');
+
+const {verificaToken} = require('../middlewares/authentication');
+
 const app = express();
 
 
-
-app.get('/user', (req, res) => {
+// Verificatoken es un middleware que biene de authentication.js
+app.get('/user', verificaToken,(req, res) => {
 
 let from = req.query.from || 0;
 from = Number(from);
