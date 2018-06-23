@@ -6,7 +6,7 @@ const _ = require('underscore');
 
 const User = require('../models/user');
 
-const {verificaToken} = require('../middlewares/authentication');
+const {verificaToken,verificaRole} = require('../middlewares/authentication');
 
 const app = express();
 
@@ -47,7 +47,7 @@ limit = Number(limit);
 
 
 
-app.post('/user', (req, res) => {
+app.post('/user', [verificaToken,verificaRole],(req, res) => {
 
     let body = req.body;
 
@@ -86,7 +86,7 @@ app.post('/user', (req, res) => {
 });
 
 
-app.put('/user/:id', (req, res) => {
+app.put('/user/:id', [verificaToken,verificaRole], (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body,['name','email','img','role','status']);
@@ -110,7 +110,7 @@ app.put('/user/:id', (req, res) => {
 });
 
 
-app.delete('/user/:id', (req, res) => {
+app.delete('/user/:id', [verificaToken,verificaRole],(req, res) => {
 
     let id = req.params.id;
 
