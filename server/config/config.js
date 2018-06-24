@@ -29,3 +29,7 @@ process.env.EXPIRATION_TOKEN = 60*60*24*30;
 
 process.env.SEED = process.env.SEED || 'this is develop seed';
 
+// ========================================
+// GOOGLE CLIENT ID
+// ========================================
+process.env.CLIENT_ID = process.env.CLIENT_ID || '99619117363-04j16d62fpoq3rjbi2o0rtceo46sm3cc.apps.googleusercontent.com';
