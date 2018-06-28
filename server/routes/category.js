@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { verificaToken,verificaRole } = require('../middlewares/authentication');
+const { verificaToken, verificaRole } = require('../middlewares/authentication');
 
 const Category = require('../models/category');
 
@@ -10,24 +10,26 @@ const app = express();
 // =================================
 // Get all categories
 // =================================
-app.get('/category', verificaToken, (req,res) => {
+app.get('/category', verificaToken, (req, res) => {
 
     Category.find({})
-            .exec((err,categories) => {
+        .sort('name')
+        .populate('user', 'name email')
+        .exec((err, categories) => {
 
-                if(err){
-                    return res.status(500).json({
-                        ok:false,
-                        err
-                    });
-                }
-
-                res.json({
-                    ok:true,
-                    categories
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
                 });
+            }
 
+            res.json({
+                ok: true,
+                categories
             });
+
+        });
 
 });
 
@@ -35,30 +37,30 @@ app.get('/category', verificaToken, (req,res) => {
 // =================================
 // Get category by id
 // =================================
-app.get('/category/:id', (req,res) => {
+app.get('/category/:id', (req, res) => {
 
-    Categoria.findById(id,(err,categoryDB) => {
+    Categoria.findById(id, (err, categoryDB) => {
 
-        let id = req.params.id; 
-        if(err){
+        let id = req.params.id;
+        if (err) {
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 err
             });
         }
 
-        if(!categoryDB){
+        if (!categoryDB) {
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 err: {
-                    message:'incorrect id'
+                    message: 'incorrect id'
                 }
             });
         }
 
         res.json({
-            ok:true,
-            category:categoryDB
+            ok: true,
+            category: categoryDB
         });
 
     });
@@ -69,34 +71,34 @@ app.get('/category/:id', (req,res) => {
 // =================================
 // Create a category
 // =================================
-app.post('/category', verificaToken, (req,res) => {
+app.post('/category', verificaToken, (req, res) => {
 
     let body = req.body;
     let category = new Category({
         name: body.name,
-        description:body.description,
+        description: body.description,
         user: req.user._id
     });
 
-    category.save((err,categoryDB) => {
+    category.save((err, categoryDB) => {
 
-        if(err){
+        if (err) {
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 err
             });
         }
 
-        if(!categoryDB){
+        if (!categoryDB) {
             return res.status(400).json({
-                ok:false,
+                ok: false,
                 err
             });
         }
 
         res.json({
-            ok:true,
-            category:categoryDB
+            ok: true,
+            category: categoryDB
         });
     })
 });
@@ -106,7 +108,7 @@ app.post('/category', verificaToken, (req,res) => {
 // Update a category
 // =================================
 
-app.put('/category/:id', verificaToken, (req,res) => {
+app.put('/category/:id', verificaToken, (req, res) => {
 
     let id = req.params.id;
     let body = req.body;
@@ -115,18 +117,18 @@ app.put('/category/:id', verificaToken, (req,res) => {
         description: body.description
     }
 
-    Category.findByIdAndUpdate(id, {new:true,runValidators:true}, (err,categoryDB) => {
+    Category.findByIdAndUpdate(id, { new: true, runValidators: true }, (err, categoryDB) => {
 
-        if(err){
+        if (err) {
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 err
             });
         }
 
-        if(!categoryDB){
+        if (!categoryDB) {
             return res.status(400).json({
-                ok:false,
+                ok: false,
                 err
             });
         }
@@ -141,22 +143,22 @@ app.put('/category/:id', verificaToken, (req,res) => {
 // Delete a category
 // =================================
 
-app.delete('/category/:id',[verificaToken,verificaRole], (req,res) => {
+app.delete('/category/:id', [verificaToken, verificaRole], (req, res) => {
 
     let id = req.params.id;
 
     Category.findByIdAndRemove(id, (err, categoriaDB) => {
 
-        if(err){
+        if (err) {
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 err
             });
         }
 
-        if(!categoryDB){
+        if (!categoryDB) {
             return res.status(400).json({
-                ok:false,
+                ok: false,
                 err: {
                     message: 'id does not exist'
                 }
@@ -164,8 +166,8 @@ app.delete('/category/:id',[verificaToken,verificaRole], (req,res) => {
         }
 
         res.json({
-            ok:true,
-            message:'categoria borrada'
+            ok: true,
+            message: 'categoria borrada'
         })
 
     });

@@ -14,7 +14,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // Database
 // ========================================
 
- process.env.URLDB = 'mongodb://cafe-user:123456a@ds261660.mlab.com:61660/cafedb';
+process.env.URLDB = 'mongodb://cafe-user:123456a@ds261660.mlab.com:61660/cafedb';
 
 
 // ========================================
