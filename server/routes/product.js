@@ -10,8 +10,31 @@ let Product = require('../models/product');
 // =================================
 // Get all products
 // =================================
-app.get('/product', (req, res) => {
+app.get('/product', verificaToken,(req, res) => {
 
+    let from = req.query.from || 0;
+    from = Number(from);
+
+    Product.find({available:true})
+            .skip(from)
+            .limit(5)
+            .populate('user','name email')
+            .populate('category', 'description')
+            .exec((err, products) => {
+
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        err
+                    });
+                }
+
+                res.json({
+                    ok:true,
+                    products
+                });
+
+            });
 })
 
 
@@ -20,6 +43,38 @@ app.get('/product', (req, res) => {
 // =================================
 // Get product by id
 // =================================
+app.get('/product/:id', verificaToken,(req, res) => {
+
+    let id = req.params.id;
+
+    Product.findById(id)
+            .populate('user', 'name email')
+            .populate('category', 'name')
+            .exec((err,productDB) => {
+
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        err
+                    });
+                }
+
+                if (!productDB) {
+                    return res.status(400).json({
+                        ok: false,
+                        err:{
+                            messsage:'id does not exist'
+                        }
+                    });
+                }
+
+                res.json({
+                    ok:true,
+                    product:productDB
+                });
+
+            })
+}
 
 
 
@@ -113,6 +168,48 @@ app.put('/product/:id', (req, res) => {
 // =================================
 // delete product
 // =================================
+app.delete('/product/:id',verificaToken, (req,res) => {
 
+    let id = req.params.id;
+
+    Product.findById(id, (err,productDB) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err:{
+                    message: 'id does not exist'
+                }
+            });
+        }
+
+        productoDB.available = false;
+        productDB.save((err,deletedProduct) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok:true,
+                product:deletedProduct,
+                message:'product deleted'
+            });
+
+        });
+
+    });
+});
 
 module.exports = app;
