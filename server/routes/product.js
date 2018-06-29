@@ -10,31 +10,31 @@ let Product = require('../models/product');
 // =================================
 // Get all products
 // =================================
-app.get('/product', verificaToken,(req, res) => {
+app.get('/product', verificaToken, (req, res) => {
 
     let from = req.query.from || 0;
     from = Number(from);
 
-    Product.find({available:true})
-            .skip(from)
-            .limit(5)
-            .populate('user','name email')
-            .populate('category', 'description')
-            .exec((err, products) => {
+    Product.find({ available: true })
+        .skip(from)
+        .limit(5)
+        .populate('user', 'name email')
+        .populate('category', 'description')
+        .exec((err, products) => {
 
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        err
-                    });
-                }
-
-                res.json({
-                    ok:true,
-                    products
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
                 });
+            }
 
+            res.json({
+                ok: true,
+                products
             });
+
+        });
 })
 
 
@@ -43,38 +43,38 @@ app.get('/product', verificaToken,(req, res) => {
 // =================================
 // Get product by id
 // =================================
-app.get('/product/:id', verificaToken,(req, res) => {
+app.get('/product/:id', (req, res) => {
 
     let id = req.params.id;
 
     Product.findById(id)
-            .populate('user', 'name email')
-            .populate('category', 'name')
-            .exec((err,productDB) => {
+        .populate('user', 'name email')
+        .populate('category', 'name')
+        .exec((err, productDB) => {
 
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        err
-                    });
-                }
-
-                if (!productDB) {
-                    return res.status(400).json({
-                        ok: false,
-                        err:{
-                            messsage:'id does not exist'
-                        }
-                    });
-                }
-
-                res.json({
-                    ok:true,
-                    product:productDB
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
                 });
+            }
 
-            })
-}
+            if (!productDB) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        messsage: 'id does not exist'
+                    }
+                });
+            }
+
+            res.json({
+                ok: true,
+                product: productDB
+            });
+
+        })
+});
 
 
 
@@ -85,31 +85,31 @@ app.get('/product/:id', verificaToken,(req, res) => {
 // =================================
 app.post('/product', verificaToken, (req, res) => {
 
-    let body = req.body;
+        let body = req.body;
 
-    let product = new Product({
-        user: req.user._id,
-        name: body.name,
-        unitPrice: body.unitPrice,
-        description: body.description,
-        available: body.available,
-        category: body.category
+        let product = new Product({
+            user: req.user._id,
+            name: body.name,
+            unitPrice: body.unitPrice,
+            description: body.description,
+            available: body.available,
+            category: body.category
+        });
+
+        product.save((err, productDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.status(201).json({
+                ok: true,
+                product: productDB
+            })
+        });
     });
-
-    product.save((err, productDB) => {
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.status(201).json({
-            ok: true,
-            product: productDB
-        })
-    });
-});
 
 
 
@@ -168,11 +168,11 @@ app.put('/product/:id', (req, res) => {
 // =================================
 // delete product
 // =================================
-app.delete('/product/:id',verificaToken, (req,res) => {
+app.delete('/product/:id', verificaToken, (req, res) => {
 
     let id = req.params.id;
 
-    Product.findById(id, (err,productDB) => {
+    Product.findById(id, (err, productDB) => {
 
         if (err) {
             return res.status(500).json({
@@ -185,14 +185,14 @@ app.delete('/product/:id',verificaToken, (req,res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
-                err:{
+                err: {
                     message: 'id does not exist'
                 }
             });
         }
 
         productoDB.available = false;
-        productDB.save((err,deletedProduct) => {
+        productDB.save((err, deletedProduct) => {
 
             if (err) {
                 return res.status(500).json({
@@ -202,9 +202,9 @@ app.delete('/product/:id',verificaToken, (req,res) => {
             }
 
             res.json({
-                ok:true,
-                product:deletedProduct,
-                message:'product deleted'
+                ok: true,
+                product: deletedProduct,
+                message: 'product deleted'
             });
 
         });

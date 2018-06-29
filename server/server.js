@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, '../public')));
 
 // routes global config
+
 app.use(require('./routes/index'));
 
 
