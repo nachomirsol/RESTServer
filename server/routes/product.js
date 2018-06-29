@@ -85,31 +85,31 @@ app.get('/product/:id', (req, res) => {
 // =================================
 app.post('/product', verificaToken, (req, res) => {
 
-        let body = req.body;
+    let body = req.body;
 
-        let product = new Product({
-            user: req.user._id,
-            name: body.name,
-            unitPrice: body.unitPrice,
-            description: body.description,
-            available: body.available,
-            category: body.category
-        });
-
-        product.save((err, productDB) => {
-            if (err) {
-                return res.status(500).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            res.status(201).json({
-                ok: true,
-                product: productDB
-            })
-        });
+    let product = new Product({
+        user: req.user._id,
+        name: body.name,
+        unitPrice: body.unitPrice,
+        description: body.description,
+        available: body.available,
+        category: body.category
     });
+
+    product.save((err, productDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        res.status(201).json({
+            ok: true,
+            product: productDB
+        })
+    });
+});
 
 
 
