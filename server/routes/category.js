@@ -39,9 +39,8 @@ app.get('/category', verificaToken, (req, res) => {
 // =================================
 app.get('/category/:id', (req, res) => {
 
-    Categoria.findById(id, (err, categoryDB) => {
-
-        let id = req.params.id;
+    let id = req.params.id;
+    Category.findById(id, (err, categoryDB) => {      
         if (err) {
             return res.status(500).json({
                 ok: false,
