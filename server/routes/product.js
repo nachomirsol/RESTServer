@@ -191,7 +191,7 @@ app.delete('/product/:id', verificaToken, (req, res) => {
             });
         }
 
-        productoDB.available = false;
+        productDB.available = false;
         productDB.save((err, deletedProduct) => {
 
             if (err) {
