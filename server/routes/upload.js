@@ -1,8 +1,13 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
+
 const app = express();
 
 const User = require('../models/user');
+const Product = require('../models/product');
+
+const fs = require('fs');
+const path = require('path');
 
 //default options
 app.use(fileUpload());
@@ -64,54 +69,113 @@ app.put('/upload/:type/:id', (req, res) => {
                 ok: false,
                 err
             })
-        
-        // Image loaded
 
-        userImage(id,res,fileName);
+        // Image loaded
+        if(type ==='users'){
+            userImage(id, res, fileName);
+        }else{
+            productImage(id,res,fileName);
+        }
+        
+        
     });
 
 
 });
 
 
-function userImage(id,res,fileName){
+function userImage(id, res, fileName) {
 
-    User.findById(id,(err,userDB) => {
+    User.findById(id, (err, userDB) => {
 
-        if(err){
+        if (err) {
+
+            deleteFile(fileName, 'users');
+
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 err
             });
         }
 
-        if(!userDB){
+        if (!userDB) {
+
+            deleteFile(fileName, 'users');
+
             return res.status(400).json({
-                ok:false,
+                ok: false,
                 err: {
                     message: 'User does not exist'
                 }
             });
         }
 
+
         userDB.img = fileName;
 
-        userDB.save((err,userDB) => {
+        userDB.save((err, userDB) => {
 
             res.json({
-                ok:true,
+                ok: true,
                 user: userDB,
                 img: fileName
             })
         })
 
-
-
     });
 
 }
 
-function productImage(){
+function productImage(id, res, fileName) {
+
+    Product.findById(id, (err, productDB) => {
+
+        if (err) {
+
+            deleteFile(fileName, 'products');
+
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!productDB) {
+
+            deleteFile(fileName, 'products');
+
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Product does not exist'
+                }
+            });
+        }
+
+
+        deleteFile(productDB.img,'products');
+
+        productDB.img = fileName;
+
+        productDB.save((err, productDB) => {
+
+            res.json({
+                ok: true,
+                product: productDB,
+                img: fileName
+            });
+        });
+    });
+}
+
+
+function deleteFile(fileName, type) {
+
+    let pathUrl = path.resolve(__dirname, `../../uploads/${type}/${fileName}`);
+
+    if (fs.existsSync(pathUrl)) {
+        fs.unlinkSync(pathUrl);
+    }
 
 }
 
