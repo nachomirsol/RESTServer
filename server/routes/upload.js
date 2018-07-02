@@ -45,7 +45,6 @@ app.put('/upload/:type/:id', (req, res) => {
     let file = req.files.file;
     let fileNameExtension = file.name.split('.');
     let extension = fileNameExtension[fileNameExtension.length - 1];
-    console.log(extension)
 
     // allowed extensions
     let extensions = ['png', 'jpg', 'pdf', 'jpeg', 'gif'];
