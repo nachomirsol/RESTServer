@@ -15,13 +15,15 @@ REST Server API to manage users, categories and products from a café.
 - Mlab
 
 ## Dependencies
-- Express
+- express
+- express-fileupload
 - BodyParser
 - bcrypt
 - mongoose
 - mongoose-unique-validator
 - underscore
-- Json Web Token (jwt)
+- jsonwebtoken
+- google-auth-library
 
 ## How to use it
 Download or clone repo to your local branch.
